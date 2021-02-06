@@ -1,0 +1,7 @@
+﻿cmake_minimum_required (VERSION 3.8)
+
+project ("zengluec")
+add_subdirectory(lib/ZenLib)
+add_library (zenglue SHARED "zenglue.cpp")
+
+target_link_libraries(zenglue PRIVATE zenload vdfs)
