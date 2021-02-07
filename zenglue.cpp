@@ -1,6 +1,7 @@
 ﻿#include <vdfs/fileIndex.h>
 #include <zenload/zenParser.h>
 #include <zenload/zCMesh.h>
+#include <zenload/zCProgMeshProto.h>
 
 #define EXPORT extern "C" __declspec(dllexport)
 //#define EXPORT comment(linker, "/EXPORT:" __FUNCTION__ "=" __FUNCDNAME__)
@@ -30,6 +31,10 @@ EXPORT uint32_t zg_vdfs_file_count(VDFS::FileIndex *vdfs) {
 	return static_cast<uint32_t>(filenames.size());
 }
 
+EXPORT uint32_t zg_vdfs_file_exists(VDFS::FileIndex* vdfs, const char *name) {
+	return vdfs->hasFile(name) ? 1 : 0;
+}
+
 EXPORT const char *zg_vdfs_file_name_get(VDFS::FileIndex *vdfs, uint32_t index) {
 	return filenames[index].c_str();
 }
@@ -37,7 +42,6 @@ EXPORT const char *zg_vdfs_file_name_get(VDFS::FileIndex *vdfs, uint32_t index) 
 struct ZenWrapper {
 	ZenLoad::ZenParser parser;
 	std::unique_ptr<ZenLoad::oCWorldData> _data;
-	std::unique_ptr<ZenLoad::PackedMesh> _mesh;
 
 	ZenWrapper(VDFS::FileIndex *vdfs, const char *name) : parser(name, *vdfs) {}
 	ZenLoad::oCWorldData *data() {
@@ -48,13 +52,11 @@ struct ZenWrapper {
 		return _data.get(); 
 	}
 	ZenLoad::PackedMesh *mesh() { 
-		if (!_mesh) {
-			data();
-			auto zmesh = parser.getWorldMesh();
-			_mesh.reset(new ZenLoad::PackedMesh());
-			zmesh->packMesh(*_mesh);
-		}
-		return _mesh.get(); 
+		data();
+		auto zmesh = parser.getWorldMesh();
+		auto result = new ZenLoad::PackedMesh();
+		zmesh->packMesh(*result);
+		return result;
 	}
 };
 
@@ -79,6 +81,17 @@ EXPORT ZenLoad::PackedMesh *zg_zen_mesh(ZenWrapper* zen) {
 
 EXPORT ZenLoad::oCWorldData *zg_zen_data(ZenWrapper* zen) {
 	return zen->data();
+}
+
+EXPORT ZenLoad::PackedMesh* zg_mesh_init(VDFS::FileIndex* vdfs, const char* name) {
+	ZenLoad::zCProgMeshProto proto(name, *vdfs);
+	auto result = new ZenLoad::PackedMesh();
+	proto.packMesh(*result);
+	return result;
+}
+
+EXPORT void zg_mesh_deinit(ZenLoad::PackedMesh *mesh) {
+	delete mesh;
 }
 
 EXPORT uint32_t zg_mesh_vertex_count(ZenLoad::PackedMesh *mesh) {
@@ -148,6 +161,18 @@ EXPORT const char *zg_vob_name(VOB *vob) {
 	return vob->vobName.c_str();
 }
 
-EXPORT uint32_t zg_vob_type(VOB* vob) {
+EXPORT uint32_t zg_vob_type(VOB *vob) {
 	return static_cast<uint32_t>(vob->vobType);
+}
+
+EXPORT float *zg_vob_position(VOB *vob) {
+	return vob->position.v;
+}
+
+EXPORT float* zg_vob_rotation(VOB* vob) {
+	return vob->rotationMatrix3x3.v[0];
+}
+
+EXPORT uint32_t zg_vob_light_color(VOB *vob) {
+	return vob->zCVobLight.color;
 }
