@@ -10,35 +10,6 @@ EXPORT ZenLoad::zCModelMeshLib *zg_meshlib_init(VDFS::FileIndex *vdfs, const cha
 	return new ZenLoad::zCModelMeshLib(name, *vdfs);
 }
 
-//EXPORT ZenLoad::zCModelMeshLib *zg_meshlib_init_ex(VDFS::FileIndex *vdfs, const char *name) {
-//	std::string msfile(name);
-//
-//	// try to find msb
-//	auto dot = msfile.find_last_of(".");
-//	auto base = msfile.substr(0, dot);
-//	auto new_name = base + ".MSB";
-//	if (vdfs->hasFile(new_name))
-//		msfile = new_name;
-//
-//	// load hierarchy
-//	auto hierarchy = base + ".MDH";
-//	ZenLoad::zCModelMeshLib h_meshlib(hierarchy.c_str(), *vdfs);
-//	if (!h_meshlib.isValid())
-//		return nullptr;
-//
-//	// todo make skeleton...
-//
-//	// make parser
-//	ZenLoad::ModelScriptParser *parser = nullptr;
-//	auto ext = msfile.substr(msfile.size() - 3);
-//	if (ext == "MSB")
-//
-//	ZenLoad::ZenParser zen(msfile.c_str(), *vdfs);
-//
-//
-//	return new ZenLoad::zCModelMeshLib(name, *vdfs);
-//}
-
 EXPORT void zg_meshlib_deinit(ZenLoad::zCModelMeshLib *lib) {
 	delete lib;
 }
@@ -118,9 +89,9 @@ EXPORT uint32_t zg_mesh_submesh_material_color(ZenLoad::PackedMesh *mesh, uint32
 }
 
 EXPORT uint32_t zg_mesh_submesh_element_count(ZenLoad::PackedMesh *mesh, uint32_t index) {
-	return static_cast<uint32_t>(mesh->subMeshes[index].indices.size());
+	return static_cast<uint32_t>(mesh->subMeshes[index].indexSize);
 }
 
 EXPORT uint32_t zg_mesh_submesh_element_get(ZenLoad::PackedMesh *mesh, uint32_t index, uint32_t index2) {
-	return mesh->subMeshes[index].indices[index2];
+	return mesh->indices[mesh->subMeshes[index].indexOffset + index2];
 }

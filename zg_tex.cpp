@@ -1,61 +1,12 @@
 ﻿#include <cstdint>
 
 #include <vdfs/fileIndex.h>
-#include <zenload/zenParser.h>
-#include <zenload/zCMesh.h>
-#include <zenload/zCProgMeshProto.h>
-#include <zenload/zCModelMeshLib.h>
-
+#include <zenload/zTypes.h>
 #include <zenload/ztex.h>
 #include <zenload/ztex2dds.h>
 #include <lib/libsquish/squish.h>
 
 #define EXPORT extern "C" __declspec(dllexport)
-
-struct ZenWrapper {
-	ZenLoad::ZenParser parser;
-	std::unique_ptr<ZenLoad::oCWorldData> _data;
-	bool g2;
-
-	ZenWrapper(VDFS::FileIndex *vdfs, const char *name, bool g2_) : parser(name, *vdfs), g2(g2_) {}
-	ZenLoad::oCWorldData *data() {
-		if (!_data) {
-			_data.reset(new ZenLoad::oCWorldData());
-			parser.readWorld(*_data, g2);
-		}
-		return _data.get();
-	}
-	ZenLoad::PackedMesh *mesh() {
-		data();
-		auto zmesh = parser.getWorldMesh();
-		auto result = new ZenLoad::PackedMesh();
-		zmesh->packMesh(*result);
-		return result;
-	}
-};
-
-EXPORT ZenWrapper *zg_zen_init(VDFS::FileIndex *vdfs, const char *name, bool g2_world) {
-	try {
-		auto w = new ZenWrapper(vdfs, name, g2_world);
-		w->parser.readHeader();
-		return w;
-	}
-	catch (const std::exception &) {
-		return nullptr;
-	}
-}
-
-EXPORT void zg_zen_deinit(ZenWrapper *zen) {
-	delete zen;
-}
-
-EXPORT ZenLoad::PackedMesh *zg_zen_mesh(ZenWrapper *zen) {
-	return zen->mesh();
-}
-
-EXPORT ZenLoad::oCWorldData *zg_zen_data(ZenWrapper *zen) {
-	return zen->data();
-}
 
 EXPORT uint8_t *zg_tex_init(VDFS::FileIndex *archive, const char *name) {
 	std::vector<uint8_t> data;
