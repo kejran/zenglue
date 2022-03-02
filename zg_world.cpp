@@ -192,4 +192,30 @@ EXPORT ZenLoad::oCWorldData *zg_zen_data(WorldWrapper *zen) {
     return zen->data();
 }
 
+EXPORT uint32_t zg_zen_waynet_node_count(ZenLoad::oCWorldData *data) {
+    return static_cast<uint32_t>(data->waynet.waypoints.size());
+}
 
+EXPORT const char *zg_zen_waynet_node_name_get(ZenLoad::oCWorldData *data, uint32_t index) {
+    return data->waynet.waypoints[index].wpName.c_str();
+}
+
+EXPORT float *zg_zen_waynet_node_position_get(ZenLoad::oCWorldData *data, uint32_t index) {
+    return data->waynet.waypoints[index].position.v;
+}
+
+EXPORT float *zg_zen_waynet_node_direction_get(ZenLoad::oCWorldData *data, uint32_t index) {
+    return data->waynet.waypoints[index].direction.v;
+}
+
+EXPORT uint32_t zg_zen_waynet_edge_count(ZenLoad::oCWorldData *data) {
+    return static_cast<uint32_t>(data->waynet.edges.size());
+}
+    
+EXPORT uint32_t zg_zen_waynet_edge_1_get(ZenLoad::oCWorldData *data, uint32_t index) {
+    return static_cast<uint32_t>(data->waynet.edges[index].first);
+}
+
+EXPORT uint32_t zg_zen_waynet_edge_2_get(ZenLoad::oCWorldData *data, uint32_t index) {
+    return static_cast<uint32_t>(data->waynet.edges[index].second);
+}
