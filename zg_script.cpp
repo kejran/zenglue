@@ -95,7 +95,7 @@ EXPORT const char *zg_script_ani_name_get(script *mds, uint32_t index) {
 	return mds->anis[index].name.c_str();
 }
 
-EXPORT const char *zg_script_ani_nexr_get(script *mds, uint32_t index) {
+EXPORT const char *zg_script_ani_next_get(script *mds, uint32_t index) {
 	return mds->anis[index].next.c_str();
 }
 

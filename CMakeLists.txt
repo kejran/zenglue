@@ -9,7 +9,6 @@ add_library (zenglue SHARED
 	"zg_vdfs.cpp" 
 	"zg_vob.cpp" 
 	"zg_world.cpp" 
+	"zg_ani.cpp"
 )
 target_link_libraries(zenglue PRIVATE zenload vdfs squish)
-
-
