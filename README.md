@@ -7,15 +7,20 @@ The project currently uses the [OpenGothic](https://github.com/Try/ZenLib) fork.
 
 ## Supported features
 
-- World mesh
-- Static meshes 
-- Textures
-- Materials
-- VOB hierarchy
-- Lights
+- Mesh import
+    - Static    
+    - Skinned
+    - Morphing
+- World import
+    - Mesh 
+    - Vob hierarchy
+    - Waynet
+    - Lights
+- Materials and textures
+- Animations
+- Modelscript metadata
 
 ## TODO
-- Skinned meshes
-- Animations
 - Audio
+- Particles
 - Other?
