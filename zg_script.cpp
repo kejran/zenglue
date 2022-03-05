@@ -36,7 +36,7 @@ EXPORT script *zg_script_init(VDFS::FileIndex *vdfs, const char *name) {
 	auto len = strlen(name);
 	if (0 == strncmp(name + len - 4, ".MDS", 4))
 		result->parser = new ZenLoad::MdsParserTxt(parser);
-	if (0 == strncmp(name + len - 4, ".MDH", 4))
+	if (0 == strncmp(name + len - 4, ".MSB", 4))
 		result->parser = new ZenLoad::MdsParserBin(parser);
 	if (result->parser == nullptr) 
 		return result;
@@ -57,7 +57,7 @@ EXPORT script *zg_script_init(VDFS::FileIndex *vdfs, const char *name) {
 			d.lastFrame = a.m_LastFrame;
 			d.maxFps = a.m_MaxFps;
 			d.speed = a.m_Speed;
-			d.colVolScale - a.m_ColVolScale;
+			d.colVolScale = a.m_ColVolScale;
 			b.asc = a.m_Asc;
 			b.name = a.m_Name;
 			b.next = a.m_Next;
@@ -76,7 +76,7 @@ EXPORT void zg_script_deinit(script *mds) {
 }
 
 EXPORT uint32_t zg_script_registeredmesh_count(script *mds) {
-	return mds->parser->meshesASC.size();
+	return static_cast<uint32_t>(mds->parser->meshesASC.size());
 }
 
 EXPORT const char *zg_script_registeredmesh_get(script *mds, uint32_t index) {
