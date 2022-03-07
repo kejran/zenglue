@@ -56,6 +56,30 @@ EXPORT uint32_t zg_vob_light_color(VOB *vob) {
 	return vob->zCVobLight.color;
 }
 
-EXPORT float zg_vob_light_range(VOB* vob) {
+EXPORT float zg_vob_light_range(VOB *vob) {
 	return vob->zCVobLight.range;
+}
+
+EXPORT const char* zg_vob_inter_item(VOB* vob) {
+	return vob->oCMobInter.useWithItem.c_str();
+}
+
+EXPORT const char *zg_vob_item_id(VOB *vob) {
+	return vob->oCItem.instanceName.c_str();
+}
+
+EXPORT const char* zg_vob_container_contents(VOB *vob) {
+	return vob->oCMobContainer.contains.c_str();
+}
+
+EXPORT uint32_t zg_vob_lock_locked(VOB *vob) {
+	return vob->oCMobLockable.locked ? 1 : 0;
+}
+
+EXPORT const char *zg_vob_lock_key(VOB *vob) {
+	return vob->oCMobLockable.keyInstance.c_str();
+}
+
+EXPORT const char* zg_vob_lock_code(VOB *vob) {
+	return vob->oCMobLockable.pickLockStr.c_str();
 }
