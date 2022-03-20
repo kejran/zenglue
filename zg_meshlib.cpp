@@ -42,3 +42,7 @@ EXPORT uint32_t zg_meshlib_node_parent_get(ZenLoad::zCModelMeshLib *lib, uint32_
 EXPORT float *zg_meshlib_node_transform_get(ZenLoad::zCModelMeshLib *lib, uint32_t index) {
 	return const_cast<float *>(lib->getNodes()[index].transformLocal.mv);
 }
+
+EXPORT void zg_meshlib_root_transform(ZenLoad::zCModelMeshLib* lib, float *dest) {
+	*reinterpret_cast<ZMath::float3 *>(dest) = lib->getRootNodeTranslation();
+}
